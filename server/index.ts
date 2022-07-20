@@ -6,12 +6,11 @@ import fs from "fs"
 import http from "http"
 import jwt from "jsonwebtoken"
 import { pick } from "lodash"
-import { env } from "process"
 import "./config"
 import swagger, { wA } from "./swagger"
-import { login_schema, register_schema } from "./types/Auth.schema"
-import JwtClaims from "./types/jwt_claims"
-import { Note, NotePost, NotePut } from "./types/Notes"
+import { login_schema, register_schema } from "./types/auth.schema"
+import JwtClaims from "./types/jwt.schema"
+import { Note, NotePost, NotePut } from "./types/notes"
 import { validate } from "./utils.yup"
 
 const db = new PrismaClient()
@@ -208,7 +207,7 @@ code|prev: string (email code or previous password)`,
 
 const secret =
   (fs.existsSync("./secret.txt") && fs.readFileSync("./secret.txt")) ||
-  "hmEGEwiaeVDZZnDgTK3G" + (env.NODE_ENV === "development" ? "" : Date.now())
+  "hmEGEwiaeVDZZnDgTK3G" + (process.env.NODE_ENV === "development" ? "" : Date.now())
 
 w(app.post, { input: login_schema.describe().fields })(
   "/login",

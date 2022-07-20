@@ -1,48 +1,36 @@
-import path from "path"
-import * as fs from "fs"
-import { Configuration, DefinePlugin } from "webpack"
-import CopyWebpackPlugin from "copy-webpack-plugin"
-import HtmlWebpackPlugin from "html-webpack-plugin"
-import dotenv from "dotenv"
-import { clone, mapKeys, pick } from "lodash"
+import { Configuration, DefinePlugin } from "webpack";
+import CopyWebpackPlugin from "copy-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import dotenv from "dotenv";
+import { clone, mapKeys, pick, merge, cloneDeep } from "lodash";
+import { readdirSync } from "fs";
+import { join, resolve } from "path";
 
-const version = "1.0.0." + Date.now()
+const version = "1.0.0." + Date.now();
 
 // Finds files in a folder that match a pattern
 const find = (folder: string, pattern: RegExp) =>
-  fs
-    .readdirSync(folder)
+  readdirSync(folder)
     .filter((v) => v.match(pattern))
-    .map((v) => path.resolve(folder, v))
+    .map((v) => resolve(folder, v));
 
-const config = (env, argv): Configuration => {
-  const production = argv.mode == "production"
-  const development = argv.mode == "development"
+const config = (env, argv) => {
+  const production = argv.mode == "production";
+  const development = argv.mode == "development";
+  const env_file = `.env${production ? ".production" : ""}`;
+  dotenv.config({ path: env_file });
 
-  const env_file = `./.env${production ? ".production" : ""}`
-
-  dotenv.config({ path: env_file })
   const to_define = {
     ...pick(process.env, ["WEBAPP_PATH"]),
     ...{
       DEBUG: development,
       VERSION: JSON.stringify(version),
     },
-  }
-  return {
-    context: path.resolve(__dirname),
-    entry: () => ({
-      webapp: {
-        import: find("webapp/src", /index[0-9]?.[jt]sx?$/),
-        filename: path.join(to_define.WEBAPP_PATH, "static/index.js"),
-      },
-      server: {
-        import: find("server", /index[0-9]?.[jt]s$/),
-        filename: "server.js",
-      },
-    }),
+  };
+  const common: Configuration = {
+    context: resolve(__dirname),
     output: {
-      path: path.resolve(__dirname, "dist"),
+      path: resolve(__dirname, "dist"),
     },
     module: {
       rules: [
@@ -86,22 +74,7 @@ const config = (env, argv): Configuration => {
       ],
     },
     plugins: [
-      new DefinePlugin(mapKeys(clone(to_define), k=>"process.env."+k)),
-      new HtmlWebpackPlugin({
-        template: "webapp/public/index.html",
-        filename: path.join(to_define.WEBAPP_PATH, "index.html"),
-      }),
-      new CopyWebpackPlugin({
-        patterns: [
-          {
-            from: "webapp/public",
-            to: to_define.WEBAPP_PATH,
-            filter: (p) => !p.match(/index.html$/i),
-          },
-          { from: "public" },
-          { from: env_file },
-        ],
-      }),
+      new DefinePlugin(mapKeys(clone(to_define), (k) => "process.env." + k)),
     ],
     resolve: {
       extensions: [
@@ -117,9 +90,51 @@ const config = (env, argv): Configuration => {
 
         ".json",
       ],
-      alias: [{ alias: path.resolve(__dirname, "src"), name: "@root" }],
+      alias: [{ alias: resolve(__dirname), name: "@root" }],
     },
-  }
-}
+  };
+  const client: Configuration = {
+    target: "web",
+    entry: () => ({
+      webapp: {
+        import: find("webapp/src", /index[0-9]?.[jt]sx?$/),
+        filename: join(to_define.WEBAPP_PATH, "index.js"),
+      },
+    }),
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: "webapp/public/index.html",
+        filename: join(to_define.WEBAPP_PATH, "index.html"),
+      }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: "webapp/public",
+            to: to_define.WEBAPP_PATH,
+            filter: (p) => !p.match(/index.html$/i),
+          },
+        ],
+      }),
+    ],
+  };
+  const server: Configuration = {
+    target: "node",
+    entry: () => ({
+      server: {
+        import: find("server", /index[0-9]?.[jt]s$/),
+        filename: "server.js",
+      },
+    }),
+    plugins: [
+      new CopyWebpackPlugin({
+        patterns: [
+          { from: "public" },
+          { from: env_file, to: ".env", toType: "file" },
+        ],
+      }),
+    ],
+  };
+  return [merge(cloneDeep(common), server), merge(cloneDeep(common), client)];
+};
 
-export default config
+export default config;

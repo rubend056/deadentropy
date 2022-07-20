@@ -4,7 +4,7 @@ import Test from "./components/Test"
 
 const Routes = () => {
   return (
-    <BrowserRouter basename={__PUBLIC_URL_APP__}>
+    <BrowserRouter basename={process.env.APP_PREFIX}>
       <RRoutes>
         <Route index element={<Test />} />
       </RRoutes>

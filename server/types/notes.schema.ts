@@ -1,5 +1,5 @@
 import * as y from 'yup';
-import { Note } from './Notes';
+import { Note } from './notes';
 
 export const noteModifyAllowed:(keyof Note)[] = ['text', 'type', 'name'];
 const typeAllowed: Note['type'][] = ['text'];
