@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"@webapp/*": ["./webapp/*"],
+			"@server/*": ["./server/*"]
+		},
+    "outDir": "./dist/",
+    "noImplicitAny": false,
+    "module": "ESNext",
+    "target": "ESNext",
+    "jsx": "react",
+    "allowJs": true,
+    "moduleResolution": "Node",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+  },
+	"ts-node": {
+		"compilerOptions": {
+			"module": "commonjs"
+		}
+	}
+}

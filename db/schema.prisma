@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model note {
+  id          String        @id @default(uuid())
+  text        String?
+  type        String?
+  name        String?
+  updated     DateTime?
+  createdBy   String
+  user        user          @relation(fields: [createdBy], references: [id])
+  note_access note_access[]
+}
+
+model note_access {
+  id           String  @id @default(uuid())
+  id_base      String
+  id_user      String?
+  access_level Int?
+  note         note    @relation(fields: [id_base], references: [id])
+  user         user?   @relation(fields: [id_user], references: [id])
+}
+
+model profile {
+  id    String  @id @default(uuid())
+  name  String?
+  photo Bytes?
+  user  user[]
+}
+
+model type {
+  id      Int     @id
+  name    String?
+  type_of String?
+}
+
+model user {
+  id          String        @id @default(uuid())
+  user        String        @unique
+  pass        Bytes?
+  enabled     Boolean?      @default(true)
+  profile_id  String?
+  salt        Bytes?
+  profile     profile?      @relation(fields: [profile_id], references: [id])
+  note        note[]
+  note_access note_access[]
+}

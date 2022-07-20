@@ -1,0 +1,10 @@
+{
+	"material-icon-theme.files.associations": {
+		"*.sty": "sass",
+		"*.style": "sass",
+	},
+	"files.associations": {
+		"*.sty": "sass",
+		"*.style": "sass",
+	}
+}
