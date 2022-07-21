@@ -1,9 +1,14 @@
 {
   "scripts": {
     "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
     "serve": "http-server ./dist",
-    "start": "webpack-dev-server --mode development",
-    "generate": "prisma generate --schema=./db/schema.prisma"
+    "start": "npm-run-all --parallel start:build start:server",
+    "start:build": "webpack --mode development --watch",
+    "start:server": "nodemon \"./dist/server.js\" --watch \"./dist\" -d 2",
+    "prisma:generate": "prisma generate --schema=./db/schema.prisma",
+    "prisma:push": "prisma db push --schema=./db/schema.prisma",
+    "docker:compose":"docker compose create && docker compose start"
   },
   "private": "true",
   "dependencies": {
@@ -23,6 +28,7 @@
     "http-server": "^14.1.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
+    "npm-run-all": "^4.1.5",
     "prisma": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -37,6 +43,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "nodemon": "^2.0.19",
     "ts-loader": "^9.3.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.7.4",

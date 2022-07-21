@@ -3,7 +3,8 @@
 		"baseUrl": "./",
 		"paths": {
 			"@webapp/*": ["./webapp/*"],
-			"@server/*": ["./server/*"]
+			"@server/*": ["./server/*"],
+			"@root/*": ["./*"],
 		},
     "outDir": "./dist/",
     "noImplicitAny": false,

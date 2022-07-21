@@ -3,6 +3,10 @@
 		"*.sty": "sass",
 		"*.style": "sass",
 	},
+	"material-icon-theme.folders.associations": {
+		"webapp": "app",
+		"ends": "Layout"
+	},
 	"files.associations": {
 		"*.sty": "sass",
 		"*.style": "sass",

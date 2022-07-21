@@ -34,14 +34,17 @@ export const fileMemoExpires = async <T>(fname:string,func: () => Promise<T>,exp
 	return f.data;
 }
 
-export const jwtParse = (token) => {
-  try {
-    if (!token) throw Error("Token false");
-    return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-  } catch (e) {
-    return undefined;
-  }
-};
+export const n_valid = (v)=> ['number','bigint', 'boolean'].includes(typeof v) || !!v
+export const n_format = (v) => typeof v === 'string' ? v.toLowerCase().replace(/[A-Za-z0-9_\-]/g, '') : v
+// export const normalize = <T>(v: T| (T[])) => {
+// 	return n_array(v)
+// }
+export const n_array = (v: any|any[], format?)=>{
+	let arr = Array.isArray(v) ? v : !!v ? [v] : []
+	arr = arr.filter(n_valid)
+	if(format)arr = arr.map(n_format)
+	return arr;
+}
 
 export const id_gen = () => Date.now().toString(36) + Math.random().toString(36).substring(2);
 

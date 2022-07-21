@@ -4,7 +4,8 @@ declare const DEBUG: boolean;
 declare namespace NodeJS {
   export interface ProcessEnv {
 		VERSION: string
-		WEBAPP_PATH: string
+		APP_PATH: string,
+		APP_DEBUG: boolean,
   }
 }
 

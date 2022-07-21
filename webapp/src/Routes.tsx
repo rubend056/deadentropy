@@ -4,7 +4,7 @@ import Test from "./components/Test"
 
 const Routes = () => {
   return (
-    <BrowserRouter basename={process.env.APP_PREFIX}>
+    <BrowserRouter basename={process.env.SERVER_URL_PREFIX + process.env.APP_PATH}>
       <RRoutes>
         <Route index element={<Test />} />
       </RRoutes>
