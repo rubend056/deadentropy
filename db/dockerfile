@@ -1,0 +1,8 @@
+#! Currently not being used -- only compose ATM, letf for documentation only
+
+from postgres:latest
+env POSTGRES_USER="app"
+# If it is not specified, then the value of POSTGRES_USER will be used.
+#env POSTGRES_DB="app"
+env POSTGRES_PASSWORD="HOLYCHICKEN"
+

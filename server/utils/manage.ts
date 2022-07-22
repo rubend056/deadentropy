@@ -23,8 +23,8 @@ const manage = wE((w) => {
             
             le.style.display = '';
             fetch('${
-              process.env.SERVER_URL_PREFIX
-                ? "/" + process.env.SERVER_URL_PREFIX
+              process.env.SERVER_URL_PREFIX__S
+                ? "/" + process.env.SERVER_URL_PREFIX__S
                 : ""
             }/manage?action='+e.target.id)
             .then(r=>{if(!r.ok)throw r.statusText;return r.text()})

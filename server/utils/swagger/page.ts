@@ -155,8 +155,8 @@ export const swagger_page = (req, res) => {
 	<body onload="load_toggle()">
 	<h1>Swagger</h1>
 	${
-    process.env.SERVER_URL_PREFIX
-      ? `<h2>Server's prefix is '/${process.env.SERVER_URL_PREFIX}'</h2>`
+    process.env.SERVER_URL_PREFIX__S
+      ? `<h2>Server's prefix is '/${process.env.SERVER_URL_PREFIX__S}'</h2>`
       : ""
   }
 	${ends
@@ -173,7 +173,7 @@ export const swagger_page = (req, res) => {
 					${
             l
               ? `<a href="${
-                  process.env.SERVER_URL_PREFIX ? "/" + process.env.SERVER_URL_PREFIX : ""
+                  process.env.SERVER_URL_PREFIX__S ? "/" + process.env.SERVER_URL_PREFIX__S : ""
                 }${l}">`
               : ""
           }

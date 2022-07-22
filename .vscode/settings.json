@@ -2,6 +2,8 @@
 	"material-icon-theme.files.associations": {
 		"*.sty": "sass",
 		"*.style": "sass",
+		".e*": "shellscript",
+		"db.schema": "prisma",
 	},
 	"material-icon-theme.folders.associations": {
 		"webapp": "app",
@@ -10,5 +12,7 @@
 	"files.associations": {
 		"*.sty": "sass",
 		"*.style": "sass",
+		".e*": "shellscript",
+		"db.schema": "prisma",
 	}
 }

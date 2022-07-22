@@ -29,14 +29,14 @@ type InferTypeDescriptor<T extends
 
 type TDObject = {[k:string]:TypeDescriptor};
 
-const test = {
-	a: {
-		type:'number',
-		optional: true,
-	},
-	b: {
-		type: 'number'
-	}
-} as const;
+// const test = {
+// 	a: {
+// 		type:'number',
+// 		optional: true,
+// 	},
+// 	b: {
+// 		type: 'number'
+// 	}
+// } as const;
 
-type testT = InferTypeDescriptor<typeof test>
+// type testT = InferTypeDescriptor<typeof test>

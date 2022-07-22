@@ -1,7 +1,7 @@
 import { Configuration, DefinePlugin } from "webpack";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 import { clone, mapKeys, pick, merge, cloneDeep, map, flatMap } from "lodash";
 import { readdirSync } from "fs";
 import { join, resolve } from "path";
@@ -17,18 +17,22 @@ const find = (folder: string, pattern: RegExp) =>
 const config = (env, argv) => {
   const production = argv.mode == "production";
   const development = argv.mode == "development";
-  const env_file = `.env${production ? ".production" : ""}`;
-  dotenv.config({ path: env_file });
+  // const env_file = `.env${production ? ".production" : ""}`;
+  // dotenv.config({ path: env_file });
 
+  
   const _to_define = {
-    ...pick(process.env, ["APP_PATH", "SERVER_URL_PREFIX"]),
-    ...{
-      APP_DEBUG: development,
-      VERSION: version,
-    },
+    APP_DEBUG: development,
+    VERSION: version,
   };
-  const to_define = Object.fromEntries(Object.entries(clone(_to_define)).map(([k,v]) => ["process.env." + k, JSON.stringify(v)]));
-  console.log("Definitions:\n", JSON.stringify(to_define, undefined,2))
+  
+  // Make definition of statics in source code from current environment variables
+  const to_define = Object.fromEntries(
+    Object.entries(_to_define)
+      .concat(Object.entries(process.env))
+      .map(([k, v]) => ["process.env." + k + "__S", JSON.stringify(v)])
+  );
+  
   const common: Configuration = {
     context: resolve(__dirname),
     output: {
@@ -91,8 +95,8 @@ const config = (env, argv) => {
       ],
       alias: [
         { alias: resolve(__dirname), name: "@root" },
-        { alias: resolve(__dirname, 'webapp'), name: "@webapp" },
-        { alias: resolve(__dirname, 'server'), name: "@server" },
+        { alias: resolve(__dirname, "webapp"), name: "@webapp" },
+        { alias: resolve(__dirname, "server"), name: "@server" },
       ],
     },
   };
@@ -101,20 +105,20 @@ const config = (env, argv) => {
     entry: () => ({
       webapp: {
         import: find("webapp/src", /index[0-9]?.[jt]sx?$/),
-        filename: join(_to_define.APP_PATH, "index.js"),
+        filename: join(process.env.APP_PATH, "index.js"),
       },
     }),
     plugins: [
       new DefinePlugin(to_define),
       new HtmlWebpackPlugin({
         template: "webapp/public/index.html",
-        filename: join(_to_define.APP_PATH, "index.html"),
+        filename: join(process.env.APP_PATH, "index.html"),
       }),
       new CopyWebpackPlugin({
         patterns: [
           {
             from: "webapp/public",
-            to: _to_define.APP_PATH,
+            to: process.env.APP_PATH,
             filter: (p) => !p.match(/index.html$/i),
           },
         ],
@@ -123,7 +127,7 @@ const config = (env, argv) => {
   };
   const server: Configuration = {
     target: "node",
-    
+
     entry: () => ({
       server: {
         import: find("server", /index[0-9]?.[jt]s$/),
@@ -135,7 +139,7 @@ const config = (env, argv) => {
       new CopyWebpackPlugin({
         patterns: [
           { from: "public" },
-          { from: env_file, to: ".env", toType: "file" },
+          // { from: env_file, to: ".env", toType: "file" },
         ],
       }),
     ],

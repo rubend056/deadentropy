@@ -9,7 +9,7 @@ import manage from "./utils/manage";
 import startup_time from "./utils/startup_time";
 import swagger from "./utils/swagger";
 
-const webapp_path = "/" + process.env.APP_PATH;
+const webapp_path = "/" + process.env.APP_PATH__S;
 
 var app = express();
 
@@ -41,13 +41,15 @@ w("use")(express.static(__dirname + "public"));
 // Errors
 w("use")(errors());
 
-
-
 // Listen
-http
-  .createServer(app)
-  .listen(
-    Number(process.env.SERVER_HTTP_PORT),
-    process.env.SERVER_HOSTNAME,
-    () => console.log(`App listening on port ${process.env.SERVER_HTTP_PORT}`)
-  );
+http.createServer(app).listen(
+  {
+    port: Number(process.env.SERVER_HTTP_PORT),
+    host: process.env.SERVER_HOSTNAME,
+  },
+  () => {
+    console.log(
+      `App listening on ${process.env.SERVER_HOSTNAME}:${process.env.SERVER_HTTP_PORT}`
+    );
+  }
+);

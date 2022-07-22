@@ -28,7 +28,7 @@ const pass_is_valid = (user: user, _pass?: string) => {
 const secret_file = resolve(__dirname, "secret.txt");
 const secret =
   (fs.existsSync(secret_file) && fs.readFileSync(secret_file)) ||
-  "hmEGEwiaeVDZZnDgTK3G" + (process.env.APP_DEBUG ? "" : Date.now());
+  "hmEGEwiaeVDZZnDgTK3G" + (process.env.APP_DEBUG__S ? "" : Date.now());
 
 const auth_endpoints = wE((w) => {
   w("post", {
@@ -69,7 +69,7 @@ const auth_endpoints = wE((w) => {
       if (!user) throw "User not found";
       const payload: JwtClaims = pick(user, "user", "id");
       const token = jsonwebtoken.sign(payload, secret, {
-        expiresIn: process.env.SERVER_JWT_EXPIRATION || "1d",
+        expiresIn: process.env.SERVER_JWT_EXPIRATION__S || "1d",
       });
 
       // Check password

@@ -1,20 +1,8 @@
-version: '3.8'
 services:
-  # In Docker
-  # - TEST_POSTGRES_URI=postgres://app:app@postgres/
-  # Outside Docker
-  # - TEST_POSTGRES_URI=postgres://app:app@localhost:5432/
-
-  postgres:
-    image: postgres:latest
-    restart: always
-    environment:
-      - POSTGRES_USER=app
-      - POSTGRES_PASSWORD=app
-    volumes:
-      - postgres:/var/lib/postgresql/data
+  server:
+    image: app
+    build: .
+    depends_on:
+      - "db"
     ports:
-      - '5432:5432'
-
-volumes:
-  postgres:
+      - '7376:9080'

@@ -1,18 +1,19 @@
 {
   "scripts": {
-    "build": "webpack --mode production",
-    "build:dev": "webpack --mode development",
-    "serve": "http-server ./dist",
-    "start": "npm-run-all --parallel start:build start:server",
-    "start:build": "webpack --mode development --watch",
+    "build": "env -p webpack --mode production --progress",
+    "build:dev": "env -d webpack --mode development  --progress",
+    "start": "env npm-run-all --parallel start:build start:server",
+    "start:build": "env -d webpack --mode development --watch",
     "start:server": "nodemon \"./dist/server.js\" --watch \"./dist\" -d 2",
-    "prisma:generate": "prisma generate --schema=./db/schema.prisma",
-    "prisma:push": "prisma db push --schema=./db/schema.prisma",
-    "docker:compose":"docker compose create && docker compose start"
+    "compose": "yarn s-clean && yarn build && yarn s-compose"
+  },
+  "bin": {
+    "env": "env.js"
   },
   "private": "true",
   "dependencies": {
     "@prisma/client": "^4.0.0",
+    "@types/jest": "^28.1.6",
     "@types/lodash": "^4.14.182",
     "@types/node": "^18.0.4",
     "@types/react": "^18.0.15",
@@ -25,7 +26,7 @@
     "css-loader": "^6.7.1",
     "dotenv": "^16.0.1",
     "html-webpack-plugin": "^5.5.0",
-    "http-server": "^14.1.1",
+    "jest": "^28.1.3",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "npm-run-all": "^4.1.5",
@@ -36,6 +37,7 @@
     "sass": "^1.53.0",
     "sass-convert": "^0.5.2",
     "sass-loader": "^13.0.2",
+    "scripts": "./scripts",
     "style-loader": "^3.3.1",
     "vinyl-fs": "^3.0.3",
     "webpack": "^5.73.0",
@@ -50,6 +52,7 @@
     "webpack-cli": "^4.10.0"
   },
   "prisma": {
+    "schema": "./db/db.schema",
     "seed": "./db/seed.ts"
   }
 }
