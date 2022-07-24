@@ -3,7 +3,7 @@ from node:alpine
 
 
 copy ./dist /server
-copy ./db/db.schema /server
+copy ./db/db.schema /server/schema.prisma
 
 workdir /server
-entrypoint node server.js
+cmd node ./server.js
