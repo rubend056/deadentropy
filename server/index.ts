@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import http from "http";
 import "./config";
-import Notes from "./ends/Notes";
+// import Notes from "./ends/Notes";
 import errors from "./utils/errors";
 import logger from "./utils/logger";
 import manage from "./utils/manage";
@@ -33,7 +33,7 @@ w("use")(webapp_path, express.static(__dirname + webapp_path));
 w(manage);
 
 // Notes
-w("use", { is_route: true })("/notes", Notes);
+// w("use", { is_route: true })("/notes", Notes);
 
 // Default to /public folder
 w("use")(express.static(__dirname + "public"));

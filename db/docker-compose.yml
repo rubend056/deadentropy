@@ -4,15 +4,15 @@ services:
   # Outside Docker
   # - DATABASE_URL=postgres://app:app@localhost:7377/
   db:
-    image: postgres:alpine
+    image: couchdb
     restart: always
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
+      - COUCHDB_USER
+      - COUCHDB_PASSWORD
     volumes:
-      - db:/var/lib/postgresql/data
+      - db:/opt/couchdb/data
     ports:
-      - '7377:5432'
+      - '7377:5984'
 
 volumes:
   db:

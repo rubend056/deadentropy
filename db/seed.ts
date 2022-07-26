@@ -1,30 +1,18 @@
-import { PrismaClient } from "@prisma/client"
-import g from '@root/utils/casual'
-
-const db = new PrismaClient()
-
+import g from "@root/utils/casual";
 
 async function main() {
-  await Promise.all(
-    new Array(20).fill(0).map((v, i) =>
-      db.user.create({
-        data: {
-          user: g.username,
-          pass: g.nu(Buffer.from(g.string)),
-          profile: g.u({ create: { name: g.str(g.name) } }),
-          enabled: g.u(g.coin_flip.valueOf()),
-          salt: g.nu(Buffer.from(g.string)),
-        },
-      })
-    )
-  )
+  await Promise.all([
+    ...g.array_of_digits(20).map((v, i) => {
+      return new Promise((r) => setTimeout(r, 1000));
+    }),
+  ]);
 }
 
 main()
+  .then(() => {
+    console.log("Finished seeding DB!");
+  })
   .catch((e: Error) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await db.$disconnect()
-  })
+    console.error(e);
+    process.exit(1);
+  });

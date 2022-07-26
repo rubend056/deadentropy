@@ -11,6 +11,7 @@
     "module": "ESNext",
     "target": "ESNext",
     "jsx": "react",
+		"strictNullChecks": true,
     "allowJs": true,
     "moduleResolution": "Node",
 		"allowSyntheticDefaultImports": true,

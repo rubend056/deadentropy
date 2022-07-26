@@ -1,4 +1,4 @@
-import { user } from "@prisma/client";
+import { User } from "@prisma/client";
 import { login_schema, register_schema } from "@server/types/auth.schema";
 import JwtClaims from "@server/types/jwt.schema";
 import { n_array } from "@server/utils";
