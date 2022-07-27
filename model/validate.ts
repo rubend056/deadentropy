@@ -8,10 +8,20 @@ import { addFormatsAccess } from "./access"
  *
  * va.
  **/
-const validate = [
-  (v) => addKeywords(v),
-  (v) => addFormats(v, { mode: "full" }),
-  addFormatsAccess,
-].reduce((a, f) => f(a), new Ajv()) as Ajv
 
-export default validate
+
+
+const validators:Record<string,Ajv> = {}
+
+export const create = (v: string) => {
+  if (!validators[v])
+    validators[v] = [
+      (v) => addKeywords(v),
+      (v) => addFormats(v, { mode: "full" }),
+      addFormatsAccess,
+    ].reduce((a, f) => f(a), new Ajv()) as Ajv
+}
+
+create("default")
+
+export default validators

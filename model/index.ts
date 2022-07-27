@@ -1,11 +1,16 @@
 import { mapValues } from "lodash"
-import schemas_client from "./client"
-import schemas_db from "./db"
-import validate from "./validate"
+import { access } from "./access"
+import schemas from "./schema"
+import validators, { create } from "./validate"
 
-const schemas = Object.assign({}, schemas_db, schemas_client)
-validate.addSchema(Object.values(schemas))
+const va = mapValues({ client: false, default: true }, (is_client, vname) => {
+  create(vname)
+  const validator = validators[vname]
 
-export const vad = mapValues(schemas_db, (v, k) => validate.compile(v))
-export const vac = mapValues(schemas_client, (v, k) => validate.compile(v))
+  const s = { access, ...schemas(is_client) }
+  validator.addSchema(Object.values(s))
 
+  return mapValues(s, (v, k) => validator.compile(v))
+})
+
+export default va
