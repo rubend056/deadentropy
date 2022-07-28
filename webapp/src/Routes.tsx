@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react"
-import { BrowserRouter, Routes as RRoutes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Test from "./components/Test"
 
-const Routes = () => {
+const MyRoutes = () => {
   return (
-    <BrowserRouter basename={process.env.SERVER_URL_PREFIX__S + process.env.APP_PATH__S}>
-      <RRoutes>
+    <BrowserRouter basename={process.env.SERVER_URL_PREFIX__S || "" + process.env.APP_PATH__S}>
+      <Routes>
         <Route index element={<Test />} />
-      </RRoutes>
+      </Routes>
     </BrowserRouter>
   )
 }
-export default Routes
+export default MyRoutes

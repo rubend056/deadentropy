@@ -1,4 +1,4 @@
-import Ajv from "ajv"
+import Ajv from "ajv/dist/2020"
 import addFormats from "ajv-formats"
 import addKeywords from "ajv-keywords"
 import { addFormatsAccess } from "./access"
@@ -8,18 +8,16 @@ import { addFormatsAccess } from "./access"
  *
  * va.
  **/
-
-
-
 const validators:Record<string,Ajv> = {}
 
 export const create = (v: string) => {
-  if (!validators[v])
-    validators[v] = [
-      (v) => addKeywords(v),
-      (v) => addFormats(v, { mode: "full" }),
-      addFormatsAccess,
-    ].reduce((a, f) => f(a), new Ajv()) as Ajv
+  if (!validators[v]) {
+    const val = (validators[v] = new Ajv())
+    addKeywords(val)
+    addFormats(val)
+    addFormatsAccess(val)
+  }
+  return validators[v]
 }
 
 create("default")

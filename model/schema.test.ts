@@ -1,14 +1,14 @@
-import {vad as va} from "."
+import va from "."
 
 test("Note", () => {
   expect(
-    va.note({
+    va.default.note({
       value: "Testing",
     })
   ).toBe(true)
 
   expect(
-    va.note({
+    va.default.note({
       value: 3,
     })
   ).toBe(false)

@@ -1,38 +1,39 @@
-import { Configuration, DefinePlugin } from "webpack";
-import CopyWebpackPlugin from "copy-webpack-plugin";
-import HtmlWebpackPlugin from "html-webpack-plugin";
+import { Configuration, DefinePlugin } from "webpack"
+import CopyWebpackPlugin from "copy-webpack-plugin"
+import HtmlWebpackPlugin from "html-webpack-plugin"
 // import dotenv from "dotenv";
-import { clone, mapKeys, pick, merge, cloneDeep, map, flatMap } from "lodash";
-import { readdirSync } from "fs";
-import { join, resolve } from "path";
+import { clone, mapKeys, pick, merge, cloneDeep, map, flatMap } from "lodash"
+import { readdirSync } from "fs"
+import { join, resolve } from "path"
 
-const version = "1.0.0." + Date.now();
+const version = "1.0.0." + Date.now()
 
 // Finds files in a folder that match a pattern
 const find = (folder: string, pattern: RegExp) =>
   readdirSync(folder)
     .filter((v) => v.match(pattern))
-    .map((v) => resolve(folder, v));
+    .map((v) => resolve(folder, v))
+
+
+const assert_value = <T extends any>(v?:T) => {if(typeof v === 'undefined') throw `v undefined`; return v;}
 
 const config = (env, argv) => {
-  const production = argv.mode == "production";
-  const development = argv.mode == "development";
-  // const env_file = `.env${production ? ".production" : ""}`;
-  // dotenv.config({ path: env_file });
-
+  const production = argv.mode == "production"
+  const development = argv.mode == "development"
   
+
   const _to_define = {
     APP_DEBUG: development,
     VERSION: version,
-  };
-  
+  }
+
   // Make definition of statics in source code from current environment variables
   const to_define = Object.fromEntries(
-    Object.entries(_to_define)
-      .concat(Object.entries(process.env))
-      .map(([k, v]) => ["process.env." + k + "__S", JSON.stringify(v)])
-  );
-  
+    [...Object.entries(_to_define), ...Object.entries(process.env)].map(
+      ([k, v]) => ["process.env." + k + "__S", JSON.stringify(v)]
+    )
+  )
+
   const common: Configuration = {
     context: resolve(__dirname),
     output: {
@@ -44,6 +45,11 @@ const config = (env, argv) => {
           test: /\.tsx?$/,
           exclude: /node_modules/,
           use: "ts-loader",
+        },
+				{
+          test: /\.(graph|g)ql$/,
+          exclude: /node_modules/,
+          use: "raw-loader",
         },
 
         {
@@ -65,7 +71,7 @@ const config = (env, argv) => {
               ident: "css",
             },
             (r.resource as string).match(/\.css$/i)
-              ? undefined
+              ? {}
               : {
                   loader: "sass-loader",
                   options: {
@@ -99,32 +105,32 @@ const config = (env, argv) => {
         { alias: resolve(__dirname, "server"), name: "@server" },
       ],
     },
-  };
+  }
   const client: Configuration = {
     target: "web",
     entry: () => ({
       webapp: {
         import: find("webapp/src", /index[0-9]?.[jt]sx?$/),
-        filename: join(process.env.APP_PATH, "index.js"),
+        filename: join(assert_value(process.env.APP_PATH), "index.js"),
       },
     }),
     plugins: [
       new DefinePlugin(to_define),
       new HtmlWebpackPlugin({
         template: "webapp/public/index.html",
-        filename: join(process.env.APP_PATH, "index.html"),
+        filename: join(assert_value(process.env.APP_PATH), "index.html"),
       }),
       new CopyWebpackPlugin({
         patterns: [
           {
             from: "webapp/public",
-            to: process.env.APP_PATH,
+            to: assert_value(process.env.APP_PATH),
             filter: (p) => !p.match(/index.html$/i),
           },
         ],
       }),
     ],
-  };
+  }
   const server: Configuration = {
     target: "node",
 
@@ -143,8 +149,8 @@ const config = (env, argv) => {
         ],
       }),
     ],
-  };
-  return [merge(cloneDeep(common), server), merge(cloneDeep(common), client)];
-};
+  }
+  return [merge(cloneDeep(common), server), merge(cloneDeep(common), client)]
+}
 
-export default config;
+export default config

@@ -1,4 +1,5 @@
-import { JSONSchema7 } from "json-schema"
+import { JSONSchema22 } from "@root/types/json-schema"
+
 
 const access_regex =
   /^(?<owner>[a-z0-9_]{2,})(?: (?<rights>[0-3]{1,2})(?:;(?<users>(?::?[a-z0-9_]{2,})*)(?: (?<urights>[0-3]*))?)?)?$/
@@ -25,8 +26,7 @@ export const addFormatsAccess = (v) => {
   return v
 }
 
-export const access: JSONSchema7 = {
-  $id: "access",
+export const access: JSONSchema22 = {
   title: "Access string",
   description: `Describes access to this resource from a user:
    '#' means 0-3 char, a 2bit number, where 1st bit is read, 2nd write
@@ -55,6 +55,7 @@ export const access: JSONSchema7 = {
   type: "string",
   format: "access",
 }
+
 
 export const hasAccess = (user: string, access?: string) => {
   if (typeof access === "undefined") return { read: true, write: true }

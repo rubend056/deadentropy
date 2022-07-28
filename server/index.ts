@@ -1,45 +1,50 @@
-import cors from "cors";
-import express from "express";
-import http from "http";
-import "./config";
-// import Notes from "./ends/Notes";
-import errors from "./utils/errors";
-import logger from "./utils/logger";
-import manage from "./utils/manage";
-import startup_time from "./utils/startup_time";
-import swagger from "./utils/swagger";
+import db from "@root/db/couch"
+import cors from "cors"
+import express from "express"
+import http from "http"
+import "./config"
+import { graphql } from "./graphql"
+import errors from "./utils/errors"
+import logger from "./utils/logger"
+import manage from "./utils/manage"
+import startup_time from "./utils/startup_time"
+import swagger from "./utils/swagger"
 
-const webapp_path = "/" + process.env.APP_PATH__S;
+const webapp_path = "/" + process.env.APP_PATH__S
 
-var app = express();
+var app = express()
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.text());
-app.use(cors());
-app.set("trust proxy", true);
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.text())
+app.use(cors())
+app.set("trust proxy", true)
 
-const w = swagger(app);
+const w = swagger(app)
 
-w("use")(logger());
+w("use")(logger())
 
-w("get")("/", (req, res) => res.redirect(webapp_path));
+w("get")("/", (req, res) => res.redirect(webapp_path))
 
-w(startup_time);
+w(startup_time)
 
-w("use")(webapp_path, express.static(__dirname + webapp_path));
+w("use")(webapp_path, express.static(__dirname + webapp_path))
+
+w("use")("/graphql", graphql())
 
 // Manage Server
-w(manage);
+w(manage)
 
 // Notes
-// w("use", { is_route: true })("/notes", Notes);
+;(async () => {
+  console.log(`Created document ${JSON.stringify((await (await db)..insert({name:"Ruben"})), undefined, 2)}`
+})()
 
 // Default to /public folder
-w("use")(express.static(__dirname + "public"));
+w("use")(express.static(__dirname + "public"))
 
 // Errors
-w("use")(errors());
+w("use")(errors())
 
 // Listen
 http.createServer(app).listen(
@@ -50,6 +55,6 @@ http.createServer(app).listen(
   () => {
     console.log(
       `App listening on ${process.env.SERVER_HOSTNAME}:${process.env.SERVER_HTTP_PORT}`
-    );
+    )
   }
-);
+)

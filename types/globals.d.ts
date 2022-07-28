@@ -68,3 +68,12 @@ declare module "*.scss" {
 declare module "*.sass" {
 	export default undefined;
 }
+
+declare module "*.graphql" {
+	const T : string
+	export default T;
+}
+declare module "*.gql" {
+	const T : string
+	export default T;
+}

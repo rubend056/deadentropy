@@ -1,5 +1,4 @@
-import { Name } from "ajv"
-import { vad as va } from "."
+import va from "."
 import { hasAccess } from "./access"
 
 type AT = {user: string,
@@ -12,7 +11,7 @@ describe("Access testing", () => {
   const access_test = (
     {user, access, validate, acccess_e}:AT
   ) => {
-		const ex = va.note({ note: { value: "Nothing much", access } })
+		const ex = va.default.note({ value: "Nothing much", access })
 		if(ex!==!!validate)console.log(`access: '${access}', validate:${!!validate}`)
     expect(ex).toBe(!!validate)
 		if(!validate)return;

@@ -1,8 +1,8 @@
 services:
   # In Docker
-  # - DATABASE_URL=postgres://app:app@db/
+  # - DB_URL=postgres://app:app@db/
   # Outside Docker
-  # - DATABASE_URL=postgres://app:app@localhost:7377/
+  # - DB_URL=postgres://app:app@localhost:7377/
   db:
     image: couchdb
     restart: always
