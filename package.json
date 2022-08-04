@@ -1,11 +1,10 @@
 {
   "scripts": {
-    "build": "env -p webpack --mode production --progress",
-    "build:dev": "env -d webpack --mode development  --progress",
+    "build": "webpack --mode production --progress",
     "start": "env npm-run-all --parallel start:build start:server",
     "start:build": "env -d webpack --mode development --watch",
     "start:server": "nodemon \"./dist/server.js\" --watch \"./dist\" -d 2",
-    "compose": "yarn s-clean && yarn build && yarn s-compose",
+    "compose": "yarn s-clean && env -docker yarn build && env -docker yarn s-compose",
     "test": "jest"
   },
   "private": "true",
@@ -31,6 +30,7 @@
     "html-webpack-plugin": "^5.5.0",
     "immer": "^9.0.15",
     "jest": "^28.1.3",
+    "json-schema-to-typescript": "^11.0.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "nano": "^10.0.0",

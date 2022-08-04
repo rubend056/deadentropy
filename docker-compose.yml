@@ -1,7 +1,7 @@
 services:
   server:
     image: app
-    build: .
+    build: ./
     depends_on:
       - "db"
     ports:

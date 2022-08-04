@@ -1,10 +1,7 @@
 services:
-  # In Docker
-  # - DB_URL=postgres://app:app@db/
-  # Outside Docker
-  # - DB_URL=postgres://app:app@localhost:7377/
   db:
-    image: couchdb
+    image: db
+    build: ./db
     restart: always
     environment:
       - COUCHDB_USER

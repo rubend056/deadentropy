@@ -1,4 +1,4 @@
-import db from "@root/db/couch"
+import db_init from "@root/db/couch"
 import cors from "cors"
 import express from "express"
 import http from "http"
@@ -12,49 +12,70 @@ import swagger from "./utils/swagger"
 
 const webapp_path = "/" + process.env.APP_PATH__S
 
-var app = express()
-
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.text())
-app.use(cors())
-app.set("trust proxy", true)
-
-const w = swagger(app)
-
-w("use")(logger())
-
-w("get")("/", (req, res) => res.redirect(webapp_path))
-
-w(startup_time)
-
-w("use")(webapp_path, express.static(__dirname + webapp_path))
-
-w("use")("/graphql", graphql())
-
-// Manage Server
-w(manage)
-
-// Notes
 ;(async () => {
-  console.log(`Created document ${JSON.stringify((await (await db)..insert({name:"Ruben"})), undefined, 2)}`
-})()
+  var db = await db_init()
+  await db.insert({
+    _id: "_design/note",
+    views: {
+      all: {
+        filters: {
+          "is_type": `function(doc){return doc.type === 'note'}`
+        },
+      }
+    },
+    
+  })
+  
+  var app = express()
 
-// Default to /public folder
-w("use")(express.static(__dirname + "public"))
+  app.use(express.json())
+  app.use(express.urlencoded({ extended: true }))
+  app.use(express.text())
+  app.use(cors())
+  app.set("trust proxy", true)
 
-// Errors
-w("use")(errors())
+  const w = swagger(app)
 
-// Listen
-http.createServer(app).listen(
-  {
-    port: Number(process.env.SERVER_HTTP_PORT),
-    host: process.env.SERVER_HOSTNAME,
-  },
-  () => {
+  w("use")(logger())
+
+  w("get")("/", (req, res) => res.redirect(webapp_path))
+
+  w(startup_time)
+
+  w("use")(webapp_path, express.static(__dirname + webapp_path))
+
+  w("use")("/graphql", graphql(db))
+
+  // Manage Server
+  w(manage)
+
+  // Notes
+  ;(async () => {
     console.log(
-      `App listening on ${process.env.SERVER_HOSTNAME}:${process.env.SERVER_HTTP_PORT}`
+      `Created document ${JSON.stringify(
+        await db.insert({ name: "Ruben" }),
+        undefined,
+        2
+      )}`
     )
-  }
-)
+  })()
+
+  // Default to /public folder
+  w("use")(express.static(__dirname + "public"))
+
+  // Errors
+  w("use")(errors())
+
+  // Listen
+  http.createServer(app).listen(
+    {
+      port: Number(process.env.SERVER_HTTP_PORT),
+      host: process.env.SERVER_HOSTNAME,
+    },
+    () => {
+      console.log(
+        `App listening on ${process.env.SERVER_HOSTNAME}:${process.env.SERVER_HTTP_PORT}`
+      )
+    }
+  )
+})()
