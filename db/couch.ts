@@ -1,6 +1,8 @@
 import Nano from "nano"
+import '@server/config'
+import { DBDoc } from "@root/model_dist/ts/default/doc"
 
-const db = (async () => {
+const db_init = async () => {
   const db_name = process.env.DB_NAME__S
 
   const db_url = process.env.DB_URL
@@ -14,12 +16,15 @@ const db = (async () => {
   const create = !dbs.includes(db_name)
   if (create) await nano.db.create(db_name)
 
-  const db = nano.use(db_name)
+  const db = nano.use<DBDoc>(db_name)
+  
 	
   console.log(
     `DB "${db_name}" ${create ? "created" : "connected"} successfully!`
   )
   return db
-})()
+}
 
-export default db
+export type DBScope = Nano.DocumentScope<DBDoc>
+
+export default db_init

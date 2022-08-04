@@ -1,6 +1,7 @@
 yarn-error.log
 
 node_modules
+model_dist
 
 dist
 

@@ -1,0 +1,26 @@
+type Note  {
+  id: ID
+  value: String!
+}
+type User {
+  name: String
+  photo: String
+}
+
+type Action {
+  type: String,
+}
+
+
+type Query {
+  note(id: ID!): Note
+  notes: [Note!]!
+  user: User
+}
+
+type Mutation {
+  noteCreate(value: String): Note!
+  noteDelete(id: ID!)
+  noteModify(note: Note!)
+  log(action: Action!)
+}
