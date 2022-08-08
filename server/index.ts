@@ -14,18 +14,7 @@ const webapp_path = "/" + process.env.APP_PATH__S
 
 ;(async () => {
   var db = await db_init()
-  await db.insert({
-    _id: "_design/note",
-    views: {
-      all: {
-        filters: {
-          "is_type": `function(doc){return doc.type === 'note'}`
-        },
-      }
-    },
-    
-  })
-  
+
   var app = express()
 
   app.use(express.json())
@@ -50,15 +39,15 @@ const webapp_path = "/" + process.env.APP_PATH__S
   w(manage)
 
   // Notes
-  ;(async () => {
-    console.log(
-      `Created document ${JSON.stringify(
-        await db.insert({ name: "Ruben" }),
-        undefined,
-        2
-      )}`
-    )
-  })()
+  // ;(async () => {
+  //   console.log(
+  //     `Created document ${JSON.stringify(
+  //       await db.insert({ name: "Ruben" }),
+  //       undefined,
+  //       2
+  //     )}`
+  //   )
+  // })()
 
   // Default to /public folder
   w("use")(express.static(__dirname + "public"))

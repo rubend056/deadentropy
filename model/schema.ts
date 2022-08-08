@@ -14,14 +14,7 @@ const schemas = (name: string) => {
   const only_d = (v, o: any = false) => (is_d ? v : o)
   // Only defined in the Client schema
   // const only_client = (v, o: any = false) => (name === "client" ? v : o)
-  const doc_names = [...only_d([
-    "action", 
-  ], []), 
-  "note", 
-  "user"
-]
-  
-  const _id = {type: 'string'}
+  const doc_names = [...only_d(["action"], []), "note", "user"]
 
   const on_default = {
     // anonymous: {
@@ -33,16 +26,19 @@ const schemas = (name: string) => {
     //   },
     //   required: ['u_id', 'ips']
     // } as JSONSchema22,
-    action_type: { title: "Action Type", enum: ["opened", "closed", "selected"] } as JSONSchema22,
+    action_type: {
+      title: "Action Type",
+      enum: ["opened", "closed", "selected"],
+    } as JSONSchema22,
     action: {
       title: "Action",
-      description:"Every action on webserver, should record every users's action in the application",
+      description:
+        "Every action on webserver, should record every users's action in the application",
       type: "object",
       properties: {
-        _id,
         a: { $ref: "action_type#" },
         t: { type: "number" },
-        ip: {type: 'number'}
+        ip: { type: "number" },
       },
       required: ["a", "t"],
     } as JSONSchema22,
@@ -58,7 +54,7 @@ const schemas = (name: string) => {
     ...on_default,
 
     doc: {
-      type: 'object',
+      type: "object",
       title: "DBDoc",
       oneOf: doc_names.map((v) => ({ $ref: `${v}#` } as JSONSchema22)),
       required: ["type"],
@@ -70,14 +66,16 @@ const schemas = (name: string) => {
       type: "object",
       properties: {
         // type: {const: "note"},
+        title: { type: "string" },
         value: { type: "string", description: "The note's content" },
-        access: only_d({ $ref: "access#" }),
+        access: only_d({ $ref: "access#" }, undefined),
+        updated: { type: "integer" },
       },
       required: ["value"],
     } as JSONSchema22,
     user: {
       title: "User",
-      description: "Describes a user that can use our app",
+      description: "Describes a user",
       type: "object",
       properties: {
         // type: {const: "user"},
@@ -125,15 +123,26 @@ const schemas = (name: string) => {
   // Make a deep clone in case things get weird
   // s = cloneDeep(s)
   if (!doc_names.every((k) => Object.keys(s).includes(k)))
-    throw "DocNames has something not in the schema?"
+    throw `DocNames ${doc_names} has something not in the schema?`
   s = mapValues(s, (v, k) => {
     if (typeof v !== "object") return v
     // Set id if unset
     v.$id ??= `/model/${name}/${k}`
+    if (v.type !== "object" && doc_names.includes(k))
+      throw `Document ${k} is a doc, so it must be type: 'object', but instead it's type '${v.type}`
     if (v.type !== "object") return v
     // Set type if it's a document in our DB
-    if (doc_names.includes(k) && v.properties)
-      v.properties.type ??= { const: k }
+    if (doc_names.includes(k)) {
+      if (v.properties) {
+        if (is_d) {
+          v.properties.type ??= { const: k }
+        }
+        v.properties._id ??= { type: "string" }
+        v.properties._rev ??= { type: "string" }
+      }
+      // Lock document for clients
+      if (!is_d) v.additionalProperties ??= false
+    }
     return v
   })
   // Remove any false keys

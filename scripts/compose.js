@@ -7,10 +7,10 @@ const app_dir = fs.realpathSync(process.cwd());
 const shell = require("shelljs");
 const find = require("find");
 
-const files = find
+const files = process.argv[2] ? [process.argv[2]] : find
   .fileSync(/docker-compose\.yml/, app_dir)
   // To order by dir placement
-  .sort((a, b) => a.split("/").length - b.split("/").length);
+  .sort((a, b) => b.split("/").length - a.split("/").length);
 
 console.log('Compose files: ', files)
   

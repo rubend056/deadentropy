@@ -1,10 +1,14 @@
 {
   "scripts": {
-    "build": "webpack --mode production --progress",
-    "start": "env npm-run-all --parallel start:build start:server",
-    "start:build": "env -d webpack --mode development --watch",
+    "build": "yarn build:dev",
+    "build:dev": "env -d webpack --mode development",
+    "build:prod": "env -p webpack --mode production --progress",
+    "gen": "yarn ts-node scripts/schema-compile.ts",
+    "start": "env run-p -r start:*",
+    "start:build": "yarn build:dev -- --watch",
     "start:server": "nodemon \"./dist/server.js\" --watch \"./dist\" -d 2",
     "compose": "yarn s-clean && env -docker yarn build && env -docker yarn s-compose",
+    "compose:db": "env -docker yarn s-compose ./db/docker-compose.yml",
     "test": "jest"
   },
   "private": "true",
@@ -36,6 +40,7 @@
     "nano": "^10.0.0",
     "npm-run-all": "^4.1.5",
     "prisma": "^4.1.0",
+    "raw-loader": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
