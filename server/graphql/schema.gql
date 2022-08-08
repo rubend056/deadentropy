@@ -20,7 +20,7 @@ type Query {
 
 type Mutation {
   noteCreate(value: String): Note!
-  noteDelete(id: ID!)
-  noteModify(note: Note!)
-  log(action: Action!)
+  noteDelete(id: ID!): ID!
+  noteModify(note: Note!): Note!
+  log(action: Action!): String
 }

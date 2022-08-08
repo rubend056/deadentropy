@@ -1,10 +1,10 @@
 import { schemas } from "../model"
 import { compile } from "json-schema-to-typescript"
-import { mkdirSync, rmSync, writeFileSync } from "fs"
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "fs"
 import { parse, resolve } from "path"
 
 const base = resolve(__dirname, `../model_dist`)
-rmSync(base, { recursive: true })
+if(existsSync(base))rmSync(base, { recursive: true });
 Object.entries(schemas).forEach(([ks, vs]) => {
   let json_dir = resolve(base, `json/${ks}`)
   mkdirSync(json_dir, { recursive: true })
