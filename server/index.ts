@@ -1,4 +1,4 @@
-import db_init from "@root/db/couch"
+import db_init from "@root/db"
 import cors from "cors"
 import express from "express"
 import http from "http"

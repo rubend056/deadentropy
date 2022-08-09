@@ -66,7 +66,7 @@ const design = async (db: DBScope) => {
   // console.log(note_d)
 }
 
-const db_init = async () => {
+const couchdb_init = async () => {
   const db_name = process.env.DB_NAME__S
 
   const db_url = process.env.DB_URL
@@ -92,4 +92,4 @@ const db_init = async () => {
 
 export type DBScope = Nano.DocumentScope<DBDoc>
 
-export default db_init
+export default couchdb_init

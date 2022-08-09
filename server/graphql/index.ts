@@ -1,4 +1,4 @@
-import db_init, {DBScope} from "@root/db/couch"
+import db_init, {DBScope} from "@root/db/couchdb"
 import { graphqlHTTP } from "express-graphql"
 import { buildSchema } from "graphql"
 import schema_string from "./schema.gql"

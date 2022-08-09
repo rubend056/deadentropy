@@ -7,8 +7,9 @@
     "start": "env run-p -r start:*",
     "start:build": "yarn build:dev -- --watch",
     "start:server": "nodemon \"./dist/server.js\" --watch \"./dist\" -d 2",
-    "compose": "yarn s-clean && env -docker yarn build && env -docker yarn s-compose",
-    "compose:db": "env -docker yarn s-compose ./db/docker-compose.yml",
+    "compose": "yarn s-clean && env -docker yarn build:prod && yarn compose:all",
+    "compose:all": "env -docker docker compose up --detach --build",
+    "compose:db": "env -docker docker compose up db --detach --build",
     "test": "jest"
   },
   "private": "true",
