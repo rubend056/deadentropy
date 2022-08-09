@@ -1,4 +1,5 @@
-import db_init from "@root/db"
+
+import couchdb_init from "@root/db/couchdb"
 import cors from "cors"
 import express from "express"
 import http from "http"
@@ -13,7 +14,7 @@ import swagger from "./utils/swagger"
 const webapp_path = "/" + process.env.APP_PATH__S
 
 ;(async () => {
-  var db = await db_init()
+  var db = await couchdb_init()
 
   var app = express()
 
