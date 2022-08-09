@@ -14,13 +14,14 @@ const find = (folder: string, pattern: RegExp) =>
     .filter((v) => v.match(pattern))
     .map((v) => resolve(folder, v))
 
-
-const assert_value = <T extends any>(v?:T) => {if(typeof v === 'undefined') throw `v undefined`; return v;}
+const assert_value = <T extends any>(v?: T) => {
+  if (typeof v === "undefined") throw `v undefined`
+  return v
+}
 
 const config = (env, argv) => {
   const production = argv.mode == "production"
   const development = argv.mode == "development"
-  
 
   const _to_define = {
     APP_DEBUG: development,
@@ -28,11 +29,12 @@ const config = (env, argv) => {
   }
 
   // Make definition of statics in source code from current environment variables
-  const to_define = Object.fromEntries(
-    [...Object.entries(_to_define), ...Object.entries(process.env)].map(
+  const to_define = Object.fromEntries([
+    ...[...Object.entries(_to_define), ...Object.entries(process.env)].map(
       ([k, v]) => ["process.env." + k + "__S", JSON.stringify(v)]
-    )
-  )
+    ),
+    ["__DEBUG__", development],
+  ])
 
   const common: Configuration = {
     context: resolve(__dirname),
@@ -46,7 +48,7 @@ const config = (env, argv) => {
           exclude: /node_modules/,
           use: "ts-loader",
         },
-				{
+        {
           test: /\.(graph|g)ql$/,
           exclude: /node_modules/,
           use: "raw-loader",

@@ -1,5 +1,5 @@
 // Outside process.env because its a boolean
-declare const DEBUG: boolean;
+declare const __DEBUG__: boolean;
 // This defines 
 declare namespace NodeJS {
   export interface ProcessEnv {
