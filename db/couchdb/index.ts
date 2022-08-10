@@ -7,63 +7,52 @@ import "@server/config"
 import { DBDoc } from "@root/model_dist/ts/default/doc"
 import Babel from '@babel/standalone'
 import { cloneDeep } from "lodash"
+import map from './map.couchjs'
 
 const design = async (db: DBScope) => {
-  const designs: Record<string, Omit<ViewDocument<{}>, "_id">> = {
-    note: {
-      views: {
-        latest: {
-          map:  `function(d){
-						if(d.type === 'note') 
-            {
-              emit(d.updated, null)
-            }
-					}`,
-        },
-        access: {
-          map: `function(d){
-            if (d.type === "note") {
-              const r = /^(?<owner>[a-z0-9_]{2,})(?: (?<rights>[0-3]{1,2})(?:;(?<users>(?::?[a-z0-9_]{2,})*)(?: (?<urights>[0-3]*))?)?)?$/
-              
-              const g = d.access && d.access.match(r) ? r.exec(d.access).groups : undefined
-              const t = function (...v) {
-                const k = v.every(Boolean) ? "_" + v.join("_") : ""
-                if (k) emit(k, null)
-              }
-              t("3", g.owner)
-              t(g.rights?.[0])
-              g.users?.split(":").forEach((u, i) => t(g.urights?.[i] ?? g.rights?.[1], u))
-            }
-          }`,
-        },
-      },
-    },
-  }
+	console.log("Map: ",map)
+  // const designs: Record<string, Omit<ViewDocument<{}>, "_id">> = {
+  //   note: {
+  //     views: {
+  //       latest: {
+  //         map:  `function(d){
+	// 					if(d.type === 'note') 
+  //           {
+  //             emit(d.updated, null)
+  //           }
+	// 				}`,
+  //       },
+  //       access: {
+  //         map: "",
+  //       },
+  //     },
+  //   },
+  // }
 
-  const k_to_design = (k) => `_design/${k}`
-  const designs_db = await db.fetch({
-    keys: Object.keys(designs).map(k_to_design),
-  })
-  // console.log(JSON.stringify(designs_db, undefined, 2))
-  const lookupValid = <T extends {}>(
-    r: DocumentLookupFailure | DocumentResponseRow<T>
-  ): r is DocumentResponseRow<T> => typeof r.error === "undefined"
-  // Do a bulk update of designs in the db
-  const to_change = designs_db.rows.map((r) => ({
-    _id: r.key,
-    ...(lookupValid(r) ? r.doc : {}),
-    ...Object.entries(designs).find(([k, d]) => k_to_design(k) === r.key)?.[1],
-  }))
+  // const k_to_design = (k) => `_design/${k}`
+  // const designs_db = await db.fetch({
+  //   keys: Object.keys(designs).map(k_to_design),
+  // })
+  // // console.log(JSON.stringify(designs_db, undefined, 2))
+  // const lookupValid = <T extends {}>(
+  //   r: DocumentLookupFailure | DocumentResponseRow<T>
+  // ): r is DocumentResponseRow<T> => typeof r.error === "undefined"
+  // // Do a bulk update of designs in the db
+  // const to_change = designs_db.rows.map((r) => ({
+  //   _id: r.key,
+  //   ...(lookupValid(r) ? r.doc : {}),
+  //   ...Object.entries(designs).find(([k, d]) => k_to_design(k) === r.key)?.[1],
+  // }))
 
-  const bulk = await db.bulk({
-    docs: to_change,
-  })
+  // const bulk = await db.bulk({
+  //   docs: to_change,
+  // })
 
-  console.log(
-    `Pushed ${to_change.length} designs:`,
-    JSON.stringify(to_change, undefined, 2),
-    JSON.stringify(bulk, undefined, 2)
-  )
+  // console.log(
+  //   `Pushed ${to_change.length} designs:`,
+  //   JSON.stringify(to_change, undefined, 2),
+  //   JSON.stringify(bulk, undefined, 2)
+  // )
 }
 
 const couchdb_init = async () => {

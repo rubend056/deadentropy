@@ -77,3 +77,8 @@ declare module "*.gql" {
 	const T : string
 	export default T;
 }
+
+declare module "*.couchjs" {
+	const T : string
+	export default T;
+}
