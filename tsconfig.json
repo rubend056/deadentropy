@@ -17,7 +17,7 @@
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
   },
-	"exclude": ["*.graphql", "*.gql"],
+	"exclude": ["*.graphql", "*.gql", "*.couchjs"],
 	"ts-node": {
 		"compilerOptions": {
 			"module": "commonjs"

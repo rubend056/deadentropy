@@ -44,6 +44,27 @@ const config = (env, argv) => {
     module: {
       rules: [
         {
+          test: /\.couchjs$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: "babel-loader",
+              options: {
+                presets: ["@babel/preset-env"],
+								targets: ["firefox 4"],
+                plugins: [
+                  "@babel/plugin-proposal-nullish-coalescing-operator",
+                  "@babel/plugin-proposal-optional-chaining",
+                ],
+                assumptions: { noDocumentAll: true },
+              },
+            },
+            {
+              loader: "raw-loader",
+            },
+          ],
+        },
+        {
           test: /\.tsx?$/,
           exclude: /node_modules/,
           use: "ts-loader",
