@@ -3,6 +3,7 @@ import CopyWebpackPlugin from "copy-webpack-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 // import dotenv from "dotenv";
 import { clone, mapKeys, pick, merge, cloneDeep, map, flatMap } from "lodash"
+// import coucjs_loader from './couchjs-loader'
 import { readdirSync } from "fs"
 import { join, resolve } from "path"
 
@@ -41,27 +42,35 @@ const config = (env, argv) => {
     output: {
       path: resolve(__dirname, "dist"),
     },
+    devtool: 'source-map',
     module: {
       rules: [
+        // {
+        //   test: /\.couchjs$/,
+        //   exclude: /node_modules/,
+        //   use: [
+        //     {
+        //       loader: "raw-loader",
+        //     },
+        //     {
+        //       loader: 
+        //       resolve(__dirname, "./db/couchdb/couchjs-loader.js")
+        //     },
+            
+        //   ],
+        // },
         {
-          test: /\.couchjs$/,
+          test: /couch_design$/,
           exclude: /node_modules/,
           use: [
             {
-              loader: "babel-loader",
-              options: {
-                presets: ["@babel/preset-env"],
-								targets: ["firefox 4"],
-                plugins: [
-                  "@babel/plugin-proposal-nullish-coalescing-operator",
-                  "@babel/plugin-proposal-optional-chaining",
-                ],
-                assumptions: { noDocumentAll: true },
-              },
-            },
-            {
               loader: "raw-loader",
             },
+            {
+              loader: 
+              resolve(__dirname, "./db/couchdb/couchjs-design.js")
+            },
+            
           ],
         },
         {

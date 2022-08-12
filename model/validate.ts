@@ -12,7 +12,7 @@ const validators:Record<string,Ajv> = {}
 
 export const create = (v: string) => {
   if (!validators[v]) {
-    const val = (validators[v] = new Ajv())
+    const val = (validators[v] = new Ajv({useDefaults: true, strict:false}))
     addKeywords(val)
     addFormats(val)
     addFormatsAccess(val)
