@@ -1,3 +1,6 @@
 [submodule "db/couchdb/nano"]
 	path = db/couchdb/nano
 	url = git@github.com:rubend056/couchdb-nano.git
+[submodule "db/couchdb/designer"]
+	path = db/couchdb/designer
+	url = https://github.com/rubend056/couchdb-designer

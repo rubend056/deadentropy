@@ -1,3 +1,5 @@
+
+
 // Outside process.env because its a boolean
 declare const __DEBUG__: boolean;
 // This defines 
@@ -80,5 +82,10 @@ declare module "*.gql" {
 
 declare module "*.couchjs" {
 	const T : string
+	export default T;
+}
+
+declare module "*couch_design"{
+	const T : Record<string, {_id: string, [k: string]:any}[]>
 	export default T;
 }

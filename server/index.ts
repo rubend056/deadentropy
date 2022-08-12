@@ -1,4 +1,3 @@
-
 import couchdb_init from "@root/db/couchdb"
 import cors from "cors"
 import express from "express"
@@ -68,4 +67,6 @@ const webapp_path = "/" + process.env.APP_PATH__S
       )
     }
   )
-})()
+})().catch((err) => {
+  throw Error(`Server startup error: ${err?.message ?? err}`)
+})

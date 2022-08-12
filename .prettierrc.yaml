@@ -1,0 +1,13 @@
+# Last comma ,
+trailingComma: "es5"
+# Width of tabulation, in spaces
+tabWidth: 2
+# Use tabs and not spaces
+useTabs: true
+# Space before/after bracket
+bracketSpacing: true
+# Last semi ;
+semi: false
+# Single/Double quotes
+singleQuote: true
+printWidth: 120

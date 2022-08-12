@@ -135,17 +135,17 @@ const schemas = (name: string) => {
     if (doc_names.includes(k)) {
       if (v.properties) {
         if (is_d) {
-          v.properties.type ??= { const: k }
+          v.properties.type ??= { const: k, default: k }
         }
         v.properties._id ??= { type: "string" }
         v.properties._rev ??= { type: "string" }
       }
       // Lock document for clients
-      if (!is_d) v.additionalProperties ??= false
+      v.additionalProperties ??= false
     }
     return v
   })
-  // Remove any false keys
+  // Remove any false values
   s = Object.fromEntries(
     Object.entries(s).filter(([k, v]) => Boolean(v))
   ) as any
