@@ -3523,6 +3523,14 @@ fetch-cookie@0.11.0:
   dependencies:
     tough-cookie "^2.3.3 || ^3.0.1 || ^4.0.0"
 
+file-loader@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-6.2.0.tgz#baef7cf8e1840df325e4390b4484879480eebe4d"
+  integrity sha512-qo3glqyTa61Ytg4u73GultjHGjdRyig3tG6lPtyX/jOEJvHif9uB0/OCI2Kif6ctF3caQTW2G5gym21oAsI4pw==
+  dependencies:
+    loader-utils "^2.0.0"
+    schema-utils "^3.0.0"
+
 fill-range@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/fill-range/-/fill-range-7.0.1.tgz#1919a6a7c75fe38b2c7c77e5198535da9acdda40"
@@ -6244,7 +6252,7 @@ schema-utils@^4.0.0:
     ajv-keywords "^5.0.0"
 
 scripts@./scripts:
-  version "0.0.1"
+  version "0.0.2"
   dependencies:
     dotenv "^16.0.0"
     dotenv-expand "^8.0.2"
@@ -7060,6 +7068,11 @@ v8-to-istanbul@^9.0.1:
     "@jridgewell/trace-mapping" "^0.3.12"
     "@types/istanbul-lib-coverage" "^2.0.1"
     convert-source-map "^1.6.0"
+
+val-loader@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/val-loader/-/val-loader-5.0.0.tgz#1b7e45c5df207203a4b3f1c45cbc82b018b505b7"
+  integrity sha512-N766NTSjQGVxl/kQ7LRmdnPy3f8ylBx1SxgY/ZfZVnguaHK72uI5koTMMA72wQ8sxLK9TuRxBPd47w58ZI4QBA==
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

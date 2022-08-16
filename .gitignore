@@ -6,7 +6,7 @@ family_tree
 
 dist
 
-.local
+*.local
 
 ### VisualStudioCode ###
 .vscode/*      # Maybe .vscode/**/* instead - see comments

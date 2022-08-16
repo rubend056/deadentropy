@@ -12,12 +12,23 @@ export const rowValid = <T extends {}>(
 	r?: DocumentLookupFailure | DocumentResponseRow<T>
 ): r is DocumentResponseRow<T> => !!r && typeof r.error === 'undefined'
 
-export const docChanged = (_a, _b) => {
-	const a = typeof _a === 'string' ? JSON.parse(_a) : clone(_a),
-		b = typeof _b === 'string' ? JSON.parse(_b) : clone(_b)
+const sortKeys = (obj) =>
+	Object.keys(obj)
+		.sort()
+		.reduce((accumulator, key) => {
+			accumulator[key] = obj[key]
 
+			return accumulator
+		}, {})
+
+export const docChanged = (_a, _b) => {
+	let a = typeof _a === 'string' ? JSON.parse(_a) : clone(_a),
+		b = typeof _b === 'string' ? JSON.parse(_b) : clone(_b)
+	a = sortKeys(a)
+	b = sortKeys(b)
 	if (Object.hasOwn(a, '_rev')) delete a._rev
 	if (Object.hasOwn(b, '_rev')) delete b._rev
+
 	return JSON.stringify(a) !== JSON.stringify(b)
 }
 
@@ -75,9 +86,9 @@ const setup = async (nano: ServerScope) => {
 	}
 }
 
-const db_user = 'rubend'
-const db_pass = '12345678'
-const db_url = `${process.env.DB_PROTOCOL__S}://${db_user}:${db_pass}@${process.env.DB_HOST__S}`
+// const db_user = 'rubend'
+// const db_pass = '12345678'
+// const db_url = `${process.env.DB_PROTOCOL__S}://${db_user}:${db_pass}@${process.env.DB_HOST__S}`
 
 export const set_auth = (nano: DocumentScope<any> | ServerScope, user: string, pass: string) => {
 	nano.config.url = nano.config.url.replace(/\/\/([\w_-]+):([\w_-]+)@/, (s, user_o, pass_o) => `//${user}:${pass}@`)
@@ -87,11 +98,9 @@ const couchdb_init = async () => {
 	if (!couchdb_instance_url || !default_db_name)
 		throw `No  DB_URL:"${couchdb_instance_url}"  or  DB_NAME:"${default_db_name}"  ?`
 
-	const nano = Nano(db_url)
-	nano.config
-	nano.relax({})
+	const nano = Nano(couchdb_instance_url)
 
-	// await setup(nano)
+	await setup(nano)
 	const default_db = nano.use<DBDoc>(default_db_name)
 
 	return default_db

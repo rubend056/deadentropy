@@ -16,7 +16,7 @@ const mode_alias = {
 };
 
 const mode_map = {
-  development: ["d", "dev", "testing"].reverse(),
+  development: ["d", "dev", "development"].reverse(),
   production: ["p", "prod", "production"].reverse(),
   testing: ["t", "test", "testing"].reverse(),
 };
