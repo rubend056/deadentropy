@@ -20,10 +20,10 @@ console.log(`user: '${user}', pass: '${pass}'`)
 
 const db_url = `${process.env.DB_PROTOCOL__S}://${user}:${pass}@${process.env.DB_HOST__S}/${process.env.DB_NAME__S}`
 
-const pouch = new pouchdb(db_url)
+// const pouch = new pouchdb(db_url)
 
-;(async () => {
-	console.log('All docs:', await pouch.allDocs({ include_docs: true }))
-})()
+// ;(async () => {
+// 	console.log('All docs:', await pouch.allDocs({ include_docs: true }))
+// })()
 
-export default pouch
+// export default pouch

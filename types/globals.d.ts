@@ -11,7 +11,16 @@ declare namespace NodeJS {
   }
 }
 
+type Animations = {
+	name?: string,
+	v?: string,
+	a?:string,
+}[]
 
+declare module "*animations"{
+	const T: Animations;
+	export default T;
+}
 
 declare module "*.sty" {
 	const T : Record<string,string|undefined>
@@ -87,5 +96,14 @@ declare module "*.couchjs" {
 
 declare module "*couch_design"{
 	const T : Record<string, {_id: string, [k: string]:any}[]>
+	export default T;
+}
+
+declare module "*.mp4" {
+	const T : string
+	export default T;
+}
+declare module "*.mp3" {
+	const T : string
 	export default T;
 }

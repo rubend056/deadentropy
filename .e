@@ -1,4 +1,4 @@
-APP_NAME="app"
+APP_NAME="deadentropy"
 
 DEBUG_REQUEST=true
 DEBUG_RESPONSE=true

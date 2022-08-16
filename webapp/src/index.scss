@@ -1,7 +1,10 @@
 html{
-	background: hsl(0, 0, 20);
+	background: hsl(0, 0, 0);
+}
+*{
+	scrollbar-width: none;
 }
 
-#root {
-	border: 1px solid black;
-}
+// #root {
+// 	border: 1px solid black;
+// }
