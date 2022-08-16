@@ -5705,6 +5705,18 @@ postcss@^8.4.7:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+pouchdb-browser@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/pouchdb-browser/-/pouchdb-browser-7.3.0.tgz#580adf0ba70674f6cdbebd6af6d8169bca2af22f"
+  integrity sha512-reuVLKEiTBlhQKQPqlr/4k0QMalV9sVITZixEgut+aAhUrSJoBdQLC5GFRvGiocJXraOb78aqvVs7iztlr3qnQ==
+  dependencies:
+    argsarray "0.0.1"
+    immediate "3.3.0"
+    inherits "2.0.4"
+    spark-md5 "3.0.2"
+    uuid "8.3.2"
+    vuvuzela "1.0.3"
+
 pouchdb@^7.3.0:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/pouchdb/-/pouchdb-7.3.0.tgz#440fbef12dfd8f9002320802528665e883a3b7f8"
